@@ -1,1 +1,18 @@
-<button href="https://google.com">google</button>
+<button class="buttons" id="1" >Google</button>
+
+<script>
+
+let buttons = document.querySelectorAll(".buttons")
+
+let links = [
+  "google.com"
+]
+  
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        let id = Number(button.id)
+        window.location.href = "https://" + links[id - 1]
+    })
+})
+  
+</script>
