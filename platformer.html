@@ -1,0 +1,146 @@
+<div id="you"></div>
+<div id="box1"></div>
+<div id="box2"></div>
+<div id="box3"></div>
+
+<style>
+
+#you{
+    position: fixed;
+    transform: translate(-50%, -50%);
+    background-color: blue;
+    width: 50px;
+    height: 50px;
+    left: var(--x);
+    bottom: var(--y);
+}
+#box1{
+    position: fixed;
+    background-color: red;
+    width: 100%;
+    height: 150px;
+    left: 0px;
+    bottom: 0px;
+}
+#box2{
+    position: fixed;
+    transform: translate(-50%, 0%);
+    background-color: green;
+    width: 250px;
+    height: 50px;
+    left: 50%;
+    bottom: 150px;
+}
+#box3{
+    position: fixed;
+    transform: translate(-50%, 0%);
+    background-color: rgb(128, 0, 32);
+    width: 250px;
+    height: 50px;
+    left: 60%;
+    bottom: 250px;
+}
+
+</style>
+<script>
+
+function moveX(pos){
+    x+=pos
+    document.documentElement.style.setProperty("--x", x)
+}
+function moveY(pos){
+    y+=pos
+    document.documentElement.style.setProperty("--y", y)
+}
+
+function touching(a, b){
+    let A = document.getElementById(a).getBoundingClientRect()
+    let B = document.getElementById(b).getBoundingClientRect()
+
+    return(
+        A.right > B.left &&
+        A.left < B.right &&
+        B.bottom > A.top &&
+        B.top < A.bottom
+    )
+}
+
+function tAny(){
+    let touchingAny = false
+    for(let i = 0; i<collideAbles.length; i++){
+        if(touching("you", collideAbles[i])){
+            touchingAny = true
+        }
+    }
+    return(touchingAny)
+}
+
+</script>
+<script>
+
+console.log("Hello!")
+let x = 50
+let y = 150
+let keys = {}
+
+moveX(0)
+moveY(0)
+
+let falling = 0
+let speedX = 0
+let speedY = 0
+
+addEventListener("keydown", function(event){
+    keys[event.key] = true
+})
+addEventListener("keyup", function(event){
+    keys[event.key] = false
+})
+
+let collideAbles = []
+collideAbles.push("box1")
+collideAbles.push("box2")
+collideAbles.push("box3")
+
+function platformer(){
+    falling+=1
+    if(keys["ArrowUp"]){
+        if(falling<3){
+            speedY = 15
+            console.log("Up")
+        }
+    }
+    if(keys["ArrowRight"]){
+        speedX = 12
+    }
+    if(keys["ArrowLeft"]){
+        speedX = -12
+    }
+    speedY -= 1
+    speedX *= 0.8
+    if(Math.abs(speedX)<1){
+        speedX = 0
+    }
+    for(let i = 0; i<Math.abs(speedX); i++){
+        moveX(Math.abs(speedX)/speedX)
+        if(tAny()){
+            moveX(Math.abs(speedX)/speedX*-1)
+            speedX = 0
+        }
+    }
+    for(let i = 0; i<Math.abs(speedY); i++){
+        moveY(Math.abs(speedY)/speedY)
+        if(tAny()){
+            moveY(Math.abs(speedY)/speedY*-1)
+            if(speedY<0){
+                falling=0
+            }
+            speedY = 0
+        }
+    }
+
+    requestAnimationFrame(platformer)
+}
+platformer()
+
+</script>
