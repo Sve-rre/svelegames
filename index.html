@@ -1,17 +1,17 @@
-<button class="buttons" id="1" >Google</button>
+<button class="buttons" id="1" >Platformer</button>
 
 <script>
 
 let buttons = document.querySelectorAll(".buttons")
 
 let links = [
-  "google.com"
+  "https://svelegames.sverre-tresselt.workers.dev/platformer/"
 ]
   
 buttons.forEach(button => {
     button.addEventListener("click", () => {
         let id = Number(button.id)
-        window.location.href = "https://" + links[id - 1]
+        window.location.href = links[id - 1]
     })
 })
   
